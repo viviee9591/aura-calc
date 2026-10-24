@@ -1,0 +1,20 @@
+# Protect secrets
+.env
+.env.*
+!.env.example
+
+# Dependencies
+node_modules/
+
+# Build files
+dist/
+build/
+dist-ssr/
+
+# Logs
+logs/
+*.log
+
+# Local files
+*.local
+.DS_Store

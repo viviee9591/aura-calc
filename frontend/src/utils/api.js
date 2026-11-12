@@ -1,4 +1,4 @@
-const BASE = "http://localhost:5000/api";
+const BASE = (import.meta.env.VITE_API_URL || "http://localhost:5000/api").replace(/\/$/, "");
 const API = `${BASE}/history`;
 
 async function request(url, options) {
@@ -32,7 +32,14 @@ export async function askAI(question, history) {
     res = await fetch(`${BASE}/ask`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ question, history }),
+      body: JSON.stringify({
+        question,
+        history,
+        now: new Date().toLocaleString("en-IN", {
+          dateStyle: "full",
+          timeStyle: "short",
+        }),
+      }),
       signal: AbortSignal.timeout(25000),
     });
   } catch {

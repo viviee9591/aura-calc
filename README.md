@@ -1,10 +1,3 @@
-## Screenshots
-
-<img width="1079" height="614" alt="Aurelia Calculator" src="https://github.com/user-attachments/assets/4b41a678-2252-4c02-bd27-652dc9f91b9b" />
-<img width="1300" height="617" alt="Aurelia Dark Theme" src="https://github.com/user-attachments/assets/48b2ab9b-db31-41b8-aa41-939ea6190ef8" />
-<img width="1251" height="606" alt="Aurelia Blush Pink Theme" src="https://github.com/user-attachments/assets/0e87b828-d982-4337-a39f-94ce0228d92c" />
-<img width="836" height="618" alt="Aurelia AI Assistant" src="https://github.com/user-attachments/assets/1e2f3e04-2c63-4cce-9744-6d597426872d" />
-
 # Aurelia - Scientific Calculator
 
 Aurelia is a scientific calculator I built for everyday and advanced calculations. It has scientific tools, voice input, an AI maths assistant, and calculation history in one app.
@@ -97,4 +90,11 @@ http://localhost:5173
 ## Why I Built This
 
 I built Aurelia to combine calculator + voice + AI explanation + history in one place, so maths becomes easier to use and easier to understand.
+
+## Screenshots
+
+<img width="1079" height="614" alt="Aurelia Calculator" src="https://github.com/user-attachments/assets/4b41a678-2252-4c02-bd27-652dc9f91b9b" />
+<img width="1300" height="617" alt="Aurelia Dark Theme" src="https://github.com/user-attachments/assets/48b2ab9b-db31-41b8-aa41-939ea6190ef8" />
+<img width="1251" height="606" alt="Aurelia Blush Pink Theme" src="https://github.com/user-attachments/assets/0e87b828-d982-4337-a39f-94ce0228d92c" />
+<img width="836" height="618" alt="Aurelia AI Assistant" src="https://github.com/user-attachments/assets/1e2f3e04-2c63-4cce-9744-6d597426872d" />
 

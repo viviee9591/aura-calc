@@ -38,17 +38,20 @@ app.get("/", (req, res) => {
 
 async function start() {
   try {
-    const connection = await pool.getConnection();
-    console.log("MySQL connected");
-    connection.release();
+    if (!process.env.DATABASE_URL) {
+      throw new Error("DATABASE_URL is missing in the .env file");
+    }
+
+    await pool.query("SELECT 1");
+    console.log("Database connected");
 
     // creates the table on a brand new database (does nothing if it exists)
     await pool.query(`
       CREATE TABLE IF NOT EXISTS history (
-        id INT AUTO_INCREMENT PRIMARY KEY,
+        id SERIAL PRIMARY KEY,
         expression VARCHAR(255) NOT NULL,
         result VARCHAR(100) NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        created_at TIMESTAMPTZ DEFAULT NOW()
       )
     `);
 
@@ -56,7 +59,7 @@ async function start() {
       console.log(`Server running on port ${PORT}`);
     });
   } catch (err) {
-    console.error("MySQL connection failed:", err.message);
+    console.error("Database connection failed:", err.message);
     process.exit(1);
   }
 }

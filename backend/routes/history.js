@@ -6,12 +6,12 @@ const router = express.Router();
 // GET /api/history -> get all (newest first)
 router.get("/", async (req, res) => {
   try {
-    const [rows] = await pool.query(
+    const { rows } = await pool.query(
       "SELECT id, expression, result, created_at FROM history ORDER BY id DESC"
     );
     res.json(rows);
   } catch (err) {
-    console.error(err);
+    console.error(err.message);
     res.status(500).json({ error: "Could not fetch history" });
   }
 });
@@ -25,17 +25,13 @@ router.post("/", async (req, res) => {
       return res.status(400).json({ error: "expression and result are required" });
     }
 
-    const [info] = await pool.query(
-      "INSERT INTO history (expression, result) VALUES (?, ?)",
-      [String(expression), String(result)]
+    const { rows } = await pool.query(
+      "INSERT INTO history (expression, result) VALUES ($1, $2) RETURNING id, expression, result, created_at",
+      [String(expression).slice(0, 255), String(result).slice(0, 100)]
     );
-
-    const [rows] = await pool.query("SELECT * FROM history WHERE id = ?", [
-      info.insertId,
-    ]);
     res.status(201).json(rows[0]);
   } catch (err) {
-    console.error(err);
+    console.error(err.message);
     res.status(500).json({ error: "Could not save calculation" });
   }
 });
@@ -43,16 +39,18 @@ router.post("/", async (req, res) => {
 // DELETE /api/history/:id -> delete one
 router.delete("/:id", async (req, res) => {
   try {
-    const [info] = await pool.query("DELETE FROM history WHERE id = ?", [
-      req.params.id,
-    ]);
+    const id = Number(req.params.id);
+    if (!Number.isInteger(id)) {
+      return res.status(400).json({ error: "Invalid id" });
+    }
 
-    if (info.affectedRows === 0) {
+    const { rowCount } = await pool.query("DELETE FROM history WHERE id = $1", [id]);
+    if (rowCount === 0) {
       return res.status(404).json({ error: "Item not found" });
     }
-    res.json({ message: "Deleted", id: Number(req.params.id) });
+    res.json({ message: "Deleted", id });
   } catch (err) {
-    console.error(err);
+    console.error(err.message);
     res.status(500).json({ error: "Could not delete item" });
   }
 });
@@ -63,7 +61,7 @@ router.delete("/", async (req, res) => {
     await pool.query("DELETE FROM history");
     res.json({ message: "All history cleared" });
   } catch (err) {
-    console.error(err);
+    console.error(err.message);
     res.status(500).json({ error: "Could not clear history" });
   }
 });

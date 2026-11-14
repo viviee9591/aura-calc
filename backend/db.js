@@ -1,18 +1,16 @@
-import mysql from "mysql2/promise";
+import pg from "pg";
 import dotenv from "dotenv";
 
 dotenv.config();
 
-const pool = mysql.createPool({
-  host: process.env.DB_HOST,
-  port: Number(process.env.DB_PORT) || 3306,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  // cloud databases need a secure connection: set DB_SSL=true there
-  ssl: process.env.DB_SSL === "true" ? { rejectUnauthorized: false } : undefined,
-  waitForConnections: true,
-  connectionLimit: 10,
+const { Pool } = pg;
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false }, // cloud databases need a secure connection
+  max: 5, // the free pooler allows only a few connections
 });
+
+pool.on("error", (err) => console.error("Database error:", err.message));
 
 export default pool;
